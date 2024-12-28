@@ -47,8 +47,6 @@ func Logger() gin.HandlerFunc {
 		// 状态码和客户端IP
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
-
-		// 获取最后一个错误，如果有错误的话
 		errlog := c.Err()
 
 		// 记录日志
