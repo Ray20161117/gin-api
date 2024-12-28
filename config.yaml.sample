@@ -70,3 +70,5 @@ upload:
 app:
   #用于生成token的密钥,可以根据实际需要进行修改配置
   jwtSecret: go-gin
+  # token过期时间(单位：小时)
+  jwtTokenExpire: 24

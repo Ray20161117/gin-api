@@ -57,7 +57,8 @@ type Upload struct {
 
 // 其他配置, 如密钥等
 type App struct {
-	JwtSecret string `yaml:"jwtSecret"`
+	JwtSecret      string `yaml:"jwtSecret"`
+	JwtTokenExpire int    `yaml:"jwtTokenExpire"`
 }
 
 // 合并配置

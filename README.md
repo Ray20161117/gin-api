@@ -32,6 +32,9 @@ go get github.com/swaggo/gin-swagger
 ```
 可以根据项目需要设置相应的目录结构，以下是gin-api项目的目录结构：
 gin-api
+├── common                    公共目录
+│   ├── utils                 工具目录
+│   └── response              响应结果目录
 ├── config                    配置目录
 │   └── config.go             配置文件
 ├── controllers               控制器目录
