@@ -34,9 +34,69 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/login": {
+            "post": {
+                "description": "用户登录接口",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "用户登录接口",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.LoginDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "entity.LoginDto": {
+            "type": "object",
+            "required": [
+                "captcha",
+                "idKey",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "captcha": {
+                    "description": "验证码",
+                    "type": "string",
+                    "maxLength": 6,
+                    "minLength": 4
+                },
+                "idKey": {
+                    "description": "验证码key",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
         "response.Result": {
             "type": "object",
             "properties": {

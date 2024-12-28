@@ -2,7 +2,7 @@
 * Mysql 数据库连接
  */
 
-package mysql
+package db
 
 import (
 	"fmt"

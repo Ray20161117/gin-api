@@ -9,8 +9,8 @@ package main
 import (
 	"context"
 	config "gin-api/config/yaml_config"
+	"gin-api/pkg/db"
 	"gin-api/pkg/log"
-	"gin-api/pkg/mysql"
 	"gin-api/pkg/redis"
 	"gin-api/routers"
 	"net/http"
@@ -61,7 +61,7 @@ func main() {
 // 初始化连接
 func init() {
 	// mysql
-	mysql.InitMysql()
+	db.InitMysql()
 	// redis
 	redis.InitRedis()
 }

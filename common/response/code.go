@@ -28,6 +28,10 @@ type Codes struct {
 	MissingModificationOfPersonalParameters uint
 	MissingChangePasswordParameter          uint
 	RESETPASSWORD                           uint
+	QUERYUSERFAILED                         uint
+	TOKENGENERATEFAILED                     uint
+	QUERYLEFTMENUFAILED                     uint
+	QUERYPERMISSIONFAILED                   uint
 }
 
 // ApiCode 状态码
@@ -54,6 +58,10 @@ var ApiCode = &Codes{
 	MissingModificationOfPersonalParameters: 421,
 	MissingChangePasswordParameter:          422,
 	RESETPASSWORD:                           423,
+	QUERYUSERFAILED:                         424,
+	TOKENGENERATEFAILED:                     425,
+	QUERYLEFTMENUFAILED:                     426,
+	QUERYPERMISSIONFAILED:                   427,
 }
 
 // 状态信息
@@ -81,6 +89,10 @@ func init() {
 		ApiCode.MissingModificationOfPersonalParameters: "缺少修改个人信息参数",
 		ApiCode.MissingChangePasswordParameter:          "修改密码参数不能为空",
 		ApiCode.RESETPASSWORD:                           "两次输入的密码不一致，请重新输入",
+		ApiCode.QUERYUSERFAILED:                         "获取登录用户信息失败",
+		ApiCode.TOKENGENERATEFAILED:                     "生成token失败",
+		ApiCode.QUERYLEFTMENUFAILED:                     "获取左侧菜单失败",
+		ApiCode.QUERYPERMISSIONFAILED:                   "获取权限失败",
 	}
 }
 

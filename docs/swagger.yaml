@@ -1,4 +1,26 @@
 definitions:
+  entity.LoginDto:
+    properties:
+      captcha:
+        description: 验证码
+        maxLength: 6
+        minLength: 4
+        type: string
+      idKey:
+        description: 验证码key
+        type: string
+      password:
+        description: 密码
+        type: string
+      username:
+        description: 用户名
+        type: string
+    required:
+    - captcha
+    - idKey
+    - password
+    - username
+    type: object
   response.Result:
     properties:
       code:
@@ -26,6 +48,26 @@ paths:
       summary: 验证码接口
       tags:
       - 验证码
+  /api/login:
+    post:
+      description: 用户登录接口
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: 用户登录接口
+      tags:
+      - 用户管理
 securityDefinitions:
   ApiKeyAuth:
     in: header
