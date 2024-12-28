@@ -8,7 +8,7 @@ package main
 
 import (
 	"context"
-	"gin-api/config/yaml"
+	config "gin-api/config/yaml_config"
 	"gin-api/pkg/log"
 	"gin-api/pkg/mysql"
 	"gin-api/pkg/redis"
@@ -31,11 +31,11 @@ func main() {
 	// 加载日志log
 	log := log.Log()
 	// 设置启动模式
-	gin.SetMode(yaml.Cfg.Server.Model)
+	gin.SetMode(config.Cfg.Server.Model)
 	// 初始化路由
 	router := routers.InitRouter()
 	srv := &http.Server{
-		Addr:    yaml.Cfg.Server.Address,
+		Addr:    config.Cfg.Server.Address,
 		Handler: router,
 	}
 	// 启动服务
@@ -43,7 +43,7 @@ func main() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Info("listen:", err)
 		}
-		log.Info("listen:", yaml.Cfg.Server.Address)
+		log.Info("listen:", config.Cfg.Server.Address)
 	}()
 	quit := make(chan os.Signal, 1)
 	// 监听消息

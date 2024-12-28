@@ -4,14 +4,11 @@
 package routers
 
 import (
-	"gin-api/config/yaml"
-	"gin-api/controllers"
+	config "gin-api/config/yaml_config"
 	"gin-api/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // InitRouter 初始化路由
@@ -22,7 +19,7 @@ func InitRouter() *gin.Engine {
 	// 跨域中间件
 	router.Use(middlewares.Cors())
 	// 图片访问路径静态文件夹可以直接访问
-	router.StaticFS(yaml.Cfg.Upload.ImagePath, http.Dir(yaml.Cfg.Upload.ImagePath))
+	router.StaticFS(config.Cfg.Upload.ImagePath, http.Dir(config.Cfg.Upload.ImagePath))
 	// 日志中间件
 	router.Use(middlewares.Logger())
 	// 路由注册
@@ -33,9 +30,9 @@ func InitRouter() *gin.Engine {
 // register 路由注册
 func register(router *gin.Engine) {
 	// 接口文档路径
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 验证码接口
-	router.GET("/api/captcha", controllers.Captcha)
+	//router.GET("/api/captcha", controllers.Captcha)
 	// 登录接口
 	//router.POST("/api/login", controllers.Login)
 	// jwt鉴权接口

@@ -4,7 +4,7 @@
 package log
 
 import (
-	"gin-api/config/yaml"
+	config "gin-api/config/yaml_config"
 	"os"
 	"path/filepath"
 	"time"
@@ -19,17 +19,17 @@ var logToFile *logrus.Logger
 
 // 初始化日志文件名
 func init() {
-	loggerFile := filepath.Join(yaml.Cfg.Log.Path, yaml.Cfg.Log.Name)
-	if yaml.Cfg.Log.Model == "file" {
+	loggerFile := filepath.Join(config.Cfg.Log.Path, config.Cfg.Log.Name)
+	if config.Cfg.Log.Model == "file" {
 		logToFile = initializeFileLogger(loggerFile)
 	}
 }
 
 // Log 方法调用
 func Log() *logrus.Logger {
-	if yaml.Cfg.Log.Model == "file" {
+	if config.Cfg.Log.Model == "file" {
 		if logToFile == nil {
-			loggerFile := filepath.Join(yaml.Cfg.Log.Path, yaml.Cfg.Log.Name)
+			loggerFile := filepath.Join(config.Cfg.Log.Path, config.Cfg.Log.Name)
 			logToFile = initializeFileLogger(loggerFile)
 		}
 		return logToFile

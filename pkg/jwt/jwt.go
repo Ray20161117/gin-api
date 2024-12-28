@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"gin-api/config/constant"
-	"gin-api/config/yaml"
+	config "gin-api/config/yaml_config"
 	"gin-api/models/entity"
 	"time"
 
@@ -24,11 +24,11 @@ type userStdClaims struct {
 var TokenExpireDuration time.Duration
 
 func init() {
-	TokenExpireDuration = time.Duration(yaml.Cfg.App.JwtTokenExpire) * time.Hour
+	TokenExpireDuration = time.Duration(config.Cfg.App.JwtTokenExpire) * time.Hour
 }
 
 // token密钥
-var Secret = []byte(yaml.Cfg.App.JwtSecret)
+var Secret = []byte(config.Cfg.App.JwtSecret)
 var (
 	ErrAbsent  = "token absent"  // 令牌不存在
 	ErrInvalid = "token invalid" //令牌无效

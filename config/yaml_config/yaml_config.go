@@ -2,8 +2,7 @@
  * 基础配置
  * 读取yaml文件, 解析配置
  */
-
-package yaml
+package yaml_config
 
 import (
 	"os"
@@ -47,12 +46,12 @@ type Log struct {
 
 // Upload上传配置
 type Upload struct {
-	Host      string `yaml:"host"`
-	ImagePath string `yaml:"imagePath"`
-	FilePath  string `yaml:"filePath"`
-	MaxSize   int    `yaml:"maxSize"`
-	MaxNum    int    `yaml:"maxNum"`
-	AllowExt  string `yaml:"allowExt"`
+	Host      string   `yaml:"host"`
+	ImagePath string   `yaml:"imagePath"`
+	FilePath  string   `yaml:"filePath"`
+	MaxSize   int      `yaml:"maxSize"`
+	MaxNum    int      `yaml:"maxNum"`
+	AllowExt  []string `yaml:"allowExt"`
 }
 
 // 其他配置, 如密钥等

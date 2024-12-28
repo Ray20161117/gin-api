@@ -6,7 +6,7 @@ package mysql
 
 import (
 	"fmt"
-	"gin-api/config/yaml"
+	config "gin-api/config/yaml_config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,7 +17,7 @@ var Db *gorm.DB
 
 func InitMysql() error {
 	var err error
-	var DbConfig = yaml.Cfg.Database
+	var DbConfig = config.Cfg.Database
 	url := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
 		DbConfig.Username,
 		DbConfig.Password,
