@@ -16,7 +16,7 @@ import (
 )
 
 type userStdClaims struct {
-	entity.JwtAdmin
+	entity.JwtAdminDto
 	jwt.StandardClaims
 }
 
@@ -36,7 +36,7 @@ var (
 
 // 根据用户信息生成token
 func GenerateTokenByAdmin(admin entity.SysAdmin) (string, error) {
-	var jwtAdmin = entity.JwtAdmin{
+	var jwtAdmin = entity.JwtAdminDto{
 		ID:       admin.ID,
 		Username: admin.Username,
 		Nickname: admin.Nickname,
@@ -57,7 +57,7 @@ func GenerateTokenByAdmin(admin entity.SysAdmin) (string, error) {
 }
 
 // ValidateToken 解析JWT
-func ValidateToken(tokenString string) (*entity.JwtAdmin, error) {
+func ValidateToken(tokenString string) (*entity.JwtAdminDto, error) {
 	if tokenString == "" {
 		return nil, errors.New(ErrAbsent)
 	}
@@ -75,7 +75,7 @@ func ValidateToken(tokenString string) (*entity.JwtAdmin, error) {
 	if !token.Valid {
 		return nil, errors.New(ErrInvalid)
 	}
-	return &claims.JwtAdmin, nil
+	return &claims.JwtAdminDto, nil
 }
 
 // 返回id
@@ -84,7 +84,7 @@ func GetAdminId(c *gin.Context) (uint, error) {
 	if !exist {
 		return 0, errors.New("can't get user id")
 	}
-	admin, ok := u.(*entity.JwtAdmin)
+	admin, ok := u.(*entity.JwtAdminDto)
 	if ok {
 		return admin.ID, nil
 	}
@@ -97,7 +97,7 @@ func GetAdminName(c *gin.Context) (string, error) {
 	if !exist {
 		return string(string(0)), errors.New("can't get user name")
 	}
-	admin, ok := u.(*entity.JwtAdmin)
+	admin, ok := u.(*entity.JwtAdminDto)
 	if ok {
 		return admin.Username, nil
 	}
@@ -105,12 +105,12 @@ func GetAdminName(c *gin.Context) (string, error) {
 }
 
 // 返回admin信息
-func GetAdmin(c *gin.Context) (*entity.JwtAdmin, error) {
+func GetAdmin(c *gin.Context) (*entity.JwtAdminDto, error) {
 	u, exist := c.Get(constant.ContextKeyUserObj)
 	if !exist {
 		return nil, errors.New("can't get api")
 	}
-	admin, ok := u.(*entity.JwtAdmin)
+	admin, ok := u.(*entity.JwtAdminDto)
 	if ok {
 		return admin, nil
 	}

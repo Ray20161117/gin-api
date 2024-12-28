@@ -28,7 +28,7 @@ func (SysAdmin) TableName() string {
 }
 
 // 鉴权用户结构体
-type JwtAdmin struct {
+type JwtAdminDto struct {
 	ID       uint   `json:"id"`       //ID
 	Username string `json:"username"` //用户名
 	Nickname string `json:"nickname"` //昵称
