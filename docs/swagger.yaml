@@ -1,0 +1,34 @@
+definitions:
+  response.Result:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: 后台管理系统API接口文档
+  title: 通用后台管理系统
+  version: "1.0"
+paths:
+  /api/captcha:
+    get:
+      description: 验证码接口
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: 验证码接口
+      tags:
+      - 验证码
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -49,7 +49,7 @@ func Logger() gin.HandlerFunc {
 		clientIP := c.ClientIP()
 
 		// 获取最后一个错误，如果有错误的话
-		lastError := c.Errors.Last()
+		errlog := c.Err()
 
 		// 记录日志
 		logger := log.Log()
@@ -62,7 +62,7 @@ func Logger() gin.HandlerFunc {
 			"header":       header,
 			"proto":        proto,
 			"body":         bodyBytes, // 使用保存的请求体
-			"err":          lastError,
+			"err":          errlog,
 		}).Info("Request processed")
 
 		// 关闭请求体读取器

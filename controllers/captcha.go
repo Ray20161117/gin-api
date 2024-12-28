@@ -15,7 +15,7 @@ import (
 // @Tags 验证码
 // @Produce json
 // @Description 验证码接口
-// @Success 200 {object} result.Result
+// @Success 200 {object} response.Result
 // @Router /api/captcha [get]
 func Captcha(c *gin.Context) {
 	id, base64Image := services.CaptMake()

@@ -5,10 +5,15 @@ package routers
 
 import (
 	config "gin-api/config/yaml_config"
+	"gin-api/controllers"
 	"gin-api/middlewares"
 	"net/http"
 
+	_ "gin-api/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // InitRouter 初始化路由
@@ -30,9 +35,9 @@ func InitRouter() *gin.Engine {
 // register 路由注册
 func register(router *gin.Engine) {
 	// 接口文档路径
-	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 验证码接口
-	//router.GET("/api/captcha", controllers.Captcha)
+	router.GET("/api/captcha", controllers.Captcha)
 	// 登录接口
 	//router.POST("/api/login", controllers.Login)
 	// jwt鉴权接口

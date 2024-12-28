@@ -36,10 +36,17 @@ gin-api
 │   ├── utils                 工具目录
 │   └── response              响应结果目录
 ├── config                    配置目录
-│   └── config.go             配置文件
+│   ├── constant              常量配置目录
+│   └── yaml_config           读取yaml配置目录
 ├── controllers               控制器目录
+├── docs                      swagger文档目录
 ├── middlewares               中间件目录
 ├── models                    模型目录
+├── pkg                       公共包目录
+│   ├── jwt                   jwt工具目录
+│   ├── log                   log工具目录
+│   ├── mysql                 mysql工具目录
+│   └── redis                 redis工具目录
 ├── routes                    路由目录
 │   └── routes.go             路由文件
 ├── services                  服务目录, 通常负责业务逻辑
@@ -49,4 +56,14 @@ gin-api
 ├── go.mod                    项目依赖包
 ├── go.sum                    项目依赖包 
 └── README.md                 说明文档
+```
+
+#### 注意事项
+```
+1.预使用swagger工具生成API文档，需要安装swagger相关依赖包，具体安装方法请参考上面的安装依赖步骤。
+2.项目中使用了gin-swagger，需要在main.go(本项目在router文件中引入)文件中导入相关包，具体使用方法请参考gin-swagger官方文档。
+
+_ "gin-api/docs"
+swaggerFiles "github.com/swaggo/files"
+ginSwagger "github.com/swaggo/gin-swagger"
 ```
