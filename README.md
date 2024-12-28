@@ -66,4 +66,5 @@ gin-api
 _ "gin-api/docs"
 swaggerFiles "github.com/swaggo/files"
 ginSwagger "github.com/swaggo/gin-swagger"
+3.通过swag init命令生成API文档
 ```
