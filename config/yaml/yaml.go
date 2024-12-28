@@ -3,7 +3,7 @@
  * 读取yaml文件, 解析配置
  */
 
-package config
+package yaml
 
 import (
 	"os"
@@ -21,7 +21,7 @@ type Server struct {
 type Database struct {
 	Dialect  string `yaml:"dialect"`
 	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
+	Port     int    `yaml:"port"`
 	Database string `yaml:"database"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`

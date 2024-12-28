@@ -2,11 +2,11 @@
 * Mysql 数据库连接
  */
 
-package db
+package mysql
 
 import (
 	"fmt"
-	"gin-api/config"
+	"gin-api/config/yaml"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,9 +17,8 @@ var Db *gorm.DB
 
 func InitMysql() error {
 	var err error
-	var DbConfig = config.Cfg.Database
-	url := fmt.Sprint(
-		"%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+	var DbConfig = yaml.Cfg.Database
+	url := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
 		DbConfig.Username,
 		DbConfig.Password,
 		DbConfig.Host,
