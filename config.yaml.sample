@@ -1,0 +1,50 @@
+# 项目启动端口
+server:
+  # 监听地址，本地默认设置:9000,生产环境根据实际情况配置
+  address: :9000
+  # debug模式
+  model: debug
+  # release模式
+  # model: release
+
+# 数据库配置
+db:
+  dialects: mysql
+  host: 127.0.0.1
+  port: 3308
+  db: go-gin
+  username: root
+  password: 123456
+  charset: utf8
+  #最大空闲数
+  maxIdle: 50
+  #最大连接数
+  maxOpen: 150
+
+# redis配置
+redis:
+  address: 127.0.0.1:6378
+  password: ""
+  # 指定使用的redis库
+  db: 2
+
+# 图片地址配置
+imageSettings:
+  # 磁盘地址
+  uploadDir: /gin-api/upload/
+  # 本地ip地址(线上地址可以更换）
+  imageHost: http://localhost:9000
+
+# log日志配置
+log:
+  path: ./log
+  name: sys
+  # 输出控制台
+  model: console
+  # 输出到文件
+  # model: file
+
+# 密钥配置
+app:
+  #用于生成token的密钥,可以根据实际需要进行修改配置
+  jwtTokenKey: go-gin
