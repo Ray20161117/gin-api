@@ -12,7 +12,7 @@ db:
   dialects: mysql
   host: 127.0.0.1
   port: 3308
-  db: go-gin
+  database: go-gin
   username: root
   password: 123456
   charset: utf8
@@ -23,17 +23,11 @@ db:
 
 # redis配置
 redis:
-  address: 127.0.0.1:6378
+  host: 127.0.0.1
+  port: 6378
   password: ""
   # 指定使用的redis库
   db: 2
-
-# 图片地址配置
-imageSettings:
-  # 磁盘地址
-  uploadDir: /gin-api/upload/
-  # 本地ip地址(线上地址可以更换）
-  imageHost: http://localhost:9000
 
 # log日志配置
 log:
@@ -44,7 +38,35 @@ log:
   # 输出到文件
   # model: file
 
+# upload配置
+upload:
+  # 本地ip地址(线上地址可以更换）
+  host: http://localhost:9000
+  # 图片存储路径
+  imagePath: /gin-api/image/
+  # 文件存储路径
+  filePath: /gin-api/file/
+  # 允许上传的文件大小(单位：MB)
+  maxSize: 2
+  # 允许上传的文件数量
+  maxNum: 10
+  # 允许上传的文件类型 (注意：后缀名全部小写)
+  allowExt:
+    - jpg
+    - jpeg
+    - png
+    - gif
+    - bmp
+    - svg
+    - pdf
+    - doc
+    - docx
+    - xls
+    - xlsx
+    - ppt
+    - pptx
+
 # 密钥配置
 app:
   #用于生成token的密钥,可以根据实际需要进行修改配置
-  jwtTokenKey: go-gin
+  jwtSecret: go-gin
