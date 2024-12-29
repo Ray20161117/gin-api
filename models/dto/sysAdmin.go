@@ -32,16 +32,32 @@ func GetSysAdminByUsername(username string) (sysAdmin entity.SysAdmin) {
 }
 
 // 新增用户
-func CreateSysAdmin(dto entity.AddSysAdminDto) bool {
-	sysAdminByUsername := GetSysAdminByUsername(dto.Username)
-	if sysAdminByUsername.ID > 0 {
+func AddSysAdmin(dto entity.AddSysAdminDto) bool {
+	// 开启事务
+	tx := db.Db.Begin()
+	if tx.Error != nil {
 		return false
 	}
+
+	// 检查用户名是否已存在
+	var existingSysAdmin entity.SysAdmin
+	if err := tx.Where("username = ?", dto.Username).First(&existingSysAdmin).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 用户未找到，继续添加新用户
+		} else {
+			tx.Rollback()
+			return false
+		}
+	} else {
+		tx.Rollback()
+		return false
+	}
+
+	// 创建SysAdmin记录
 	sysAdmin := entity.SysAdmin{
 		PostId:     dto.PostId,
 		DeptId:     dto.DeptId,
 		Username:   dto.Username,
-		Nickname:   dto.Nickname,
 		Password:   utils.EncryptionMd5(dto.Password),
 		Phone:      dto.Phone,
 		Email:      dto.Email,
@@ -49,54 +65,23 @@ func CreateSysAdmin(dto entity.AddSysAdminDto) bool {
 		Status:     dto.Status,
 		CreateTime: utils.HTime{Time: time.Now()},
 	}
-	tx := db.Db.Create(&sysAdmin)
-	sysAdminExist := GetSysAdminByUsername(dto.Username)
-	var entity entity.SysAdminRole
-	entity.AdminId = sysAdminExist.ID
-	entity.RoleId = dto.RoleId
-	db.Db.Create(&entity)
-	return tx.RowsAffected > 0
-}
+	if err := tx.Create(&sysAdmin).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
 
-// 根据id查询用户详情
-func GetSysAdminInfo(Id int) (sysAdminInfo entity.SysAdminInfoDto) {
-	db.Db.Table("sys_admin").
-		Select("sys_admin.*, sys_admin_role.role_id").
-		Joins("LEFT JOIN sys_admin_role ON sys_admin.id = sys_admin_role.admin_id").
-		Joins("LEFT JOIN sys_role ON sys_Admin_role.role_id = sys_role.id").
-		First(&sysAdminInfo, Id)
-	return sysAdminInfo
-}
+	// 创建SysAdminRole记录
+	sysAdminRole := entity.SysAdminRole{
+		AdminId: sysAdmin.ID,
+		RoleId:  dto.RoleId,
+	}
+	if err := tx.Create(&sysAdminRole).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
 
-// 修改用户
-func UpdateSysAdmin(dto entity.UpdateSysAdminDto) (sysAdmin entity.SysAdmin) {
-	db.Db.First(&sysAdmin, dto.Id)
-	if dto.Username != "" {
-		sysAdmin.Username = dto.Username
-	}
-	sysAdmin.PostId = dto.PostId
-	sysAdmin.DeptId = dto.DeptId
-	sysAdmin.Status = dto.Status
-	if dto.Nickname != "" {
-		sysAdmin.Nickname = dto.Nickname
-	}
-	if dto.Phone != "" {
-		sysAdmin.Phone = dto.Phone
-	}
-	if dto.Email != "" {
-		sysAdmin.Email = dto.Email
-	}
-	if dto.Note != "" {
-		sysAdmin.Note = dto.Note
-	}
-	db.Db.Save(&sysAdmin)
-	// 删除之前的角色，在分配新的角色
-	var sysAdminRole entity.SysAdminRole
-	db.Db.Where("admin_id = ?", dto.Id).Delete(&entity.SysAdminRole{})
-	sysAdminRole.AdminId = dto.Id
-	sysAdminRole.RoleId = dto.RoleId
-	db.Db.Create(&sysAdminRole)
-	return sysAdmin
+	tx.Commit() // 提交事务
+	return true
 }
 
 // 根据id删除用户
