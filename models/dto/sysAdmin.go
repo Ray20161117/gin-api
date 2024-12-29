@@ -58,6 +58,7 @@ func AddSysAdmin(dto entity.AddSysAdminDto) bool {
 		PostId:     dto.PostId,
 		DeptId:     dto.DeptId,
 		Username:   dto.Username,
+		Nickname:   dto.Nickname,
 		Password:   utils.EncryptionMd5(dto.Password),
 		Phone:      dto.Phone,
 		Email:      dto.Email,
