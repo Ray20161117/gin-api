@@ -15,6 +15,42 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/admin/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "新增用户接口",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "新增用户接口",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.AddSysAdminDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/captcha": {
             "get": {
                 "description": "验证码接口",
@@ -68,6 +104,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.AddSysAdminDto": {
+            "type": "object",
+            "required": [
+                "deptId",
+                "email",
+                "nickname",
+                "password",
+                "phone",
+                "postId",
+                "rostId",
+                "status",
+                "username"
+            ],
+            "properties": {
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "note": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "postId": {
+                    "description": "岗位id",
+                    "type": "integer"
+                },
+                "rostId": {
+                    "description": "角色id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态：1-\u003e启用,2-\u003e禁用",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
         "entity.LoginDto": {
             "type": "object",
             "required": [

@@ -22,3 +22,18 @@ func Login(c *gin.Context) {
 	_ = c.BindJSON(&dto)
 	services.SysAdminService().Login(c, dto)
 }
+
+// 新增用户
+// @Tags 用户管理
+// @Summary 新增用户接口
+// @Produce json
+// @Description 新增用户接口
+// @Param data body entity.AddSysAdminDto true "data"
+// @Success 200 {object} response.Result
+// @router /api/admin/add [post]
+// @Security ApiKeyAuth
+func CreateSysAdmin(c *gin.Context) {
+	var dto entity.AddSysAdminDto
+	_ = c.BindJSON(&dto)
+	services.SysAdminService().AddSysAdmin(c, dto)
+}

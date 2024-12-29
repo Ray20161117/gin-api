@@ -32,6 +32,8 @@ type Codes struct {
 	TOKENGENERATEFAILED                     uint
 	QUERYLEFTMENUFAILED                     uint
 	QUERYPERMISSIONFAILED                   uint
+	MISSINGPARAMETER                        uint
+	ADDUSERFAILED                           uint
 }
 
 // ApiCode 状态码
@@ -62,6 +64,8 @@ var ApiCode = &Codes{
 	TOKENGENERATEFAILED:                     425,
 	QUERYLEFTMENUFAILED:                     426,
 	QUERYPERMISSIONFAILED:                   427,
+	MISSINGPARAMETER:                        428,
+	ADDUSERFAILED:                           429,
 }
 
 // 状态信息
@@ -93,6 +97,8 @@ func init() {
 		ApiCode.TOKENGENERATEFAILED:                     "生成token失败",
 		ApiCode.QUERYLEFTMENUFAILED:                     "获取左侧菜单失败",
 		ApiCode.QUERYPERMISSIONFAILED:                   "获取权限失败",
+		ApiCode.MISSINGPARAMETER:                        "缺少参数",
+		ApiCode.ADDUSERFAILED:                           "新增用户失败",
 	}
 }
 

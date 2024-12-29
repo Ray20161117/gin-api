@@ -1,4 +1,47 @@
 definitions:
+  entity.AddSysAdminDto:
+    properties:
+      deptId:
+        description: 部门id
+        type: integer
+      email:
+        description: 邮箱
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      note:
+        description: 备注
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号
+        type: string
+      postId:
+        description: 岗位id
+        type: integer
+      rostId:
+        description: 角色id
+        type: integer
+      status:
+        description: 状态：1->启用,2->禁用
+        type: integer
+      username:
+        description: 用户名
+        type: string
+    required:
+    - deptId
+    - email
+    - nickname
+    - password
+    - phone
+    - postId
+    - rostId
+    - status
+    - username
+    type: object
   entity.LoginDto:
     properties:
       captcha:
@@ -35,6 +78,28 @@ info:
   title: 通用后台管理系统
   version: "1.0"
 paths:
+  /api/admin/add:
+    post:
+      description: 新增用户接口
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.AddSysAdminDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 新增用户接口
+      tags:
+      - 用户管理
   /api/captcha:
     get:
       description: 验证码接口

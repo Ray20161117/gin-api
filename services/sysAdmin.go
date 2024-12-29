@@ -19,7 +19,7 @@ type ISysAdminService interface {
 	// 登录
 	Login(c *gin.Context, loginDto entity.LoginDto)
 	// 新增
-	//CreateSysAdmin(c *gin.Context, dto entity.AddSysAdminDto)
+	AddSysAdmin(c *gin.Context, dto entity.AddSysAdminDto)
 	// 根据ID查询详情
 	//GetSysAdminInfo(c *gin.Context, Id int)
 	// 编辑
@@ -146,6 +146,19 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 		"leftMenuList":   leftMenuVo,
 		"permissionList": stringList,
 	})
+}
+
+func (s SysAdminServiceImpl) AddSysAdmin(c *gin.Context, addSysAdminDto entity.AddSysAdminDto) {
+	if err := s.validator.Struct(addSysAdminDto); err != nil {
+		response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), response.ApiCode.GetMessage(response.ApiCode.MISSINGPARAMETER))
+		return
+	}
+	bool := dto.AddSysAdmin(addSysAdminDto)
+	if !bool {
+		response.Failed(c, int(response.ApiCode.ADDUSERFAILED), response.ApiCode.GetMessage(response.ApiCode.ADDUSERFAILED))
+		return
+	}
+	response.Success(c, nil)
 }
 
 var sysAdminService = NewSysAdminServiceImpl()
