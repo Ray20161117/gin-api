@@ -11,9 +11,9 @@ import (
 
 // 结构体
 type Result struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Code    int         `json:"code"`    // 状态码
+	Message string      `json:"message"` // 消息
+	Data    interface{} `json:"data"`    // 数据
 }
 
 // 成功返回

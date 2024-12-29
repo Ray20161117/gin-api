@@ -193,10 +193,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
+                    "description": "状态码",
                     "type": "integer"
                 },
-                "data": {},
+                "data": {
+                    "description": "数据"
+                },
                 "message": {
+                    "description": "消息",
                     "type": "string"
                 }
             }
