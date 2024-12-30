@@ -11,7 +11,7 @@ import (
 	"gin-api/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 // 定义接口
@@ -38,22 +38,23 @@ type ISysAdminService interface {
 	//UpdatePersonalPassword(c *gin.Context, dto entity.UpdatePersonalPasswordDto)
 }
 
-type SysAdminServiceImpl struct {
-	validator *validator.Validate
-}
-
-// 初始化SysAdminServiceImpl
-func NewSysAdminServiceImpl() *SysAdminServiceImpl {
-	return &SysAdminServiceImpl{
-		validator: validator.New(),
-	}
-}
+type SysAdminServiceImpl struct{}
 
 // 登录
 func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 	// 登录参数校验
-	if err := s.validator.Struct(loginDto); err != nil {
-		response.Failed(c, int(response.ApiCode.MissingLoginParameter), response.ApiCode.GetMessage(response.ApiCode.MissingLoginParameter))
+	if err := validator.New().Struct(loginDto); err != nil {
+		if firstErr := err.(validator.ValidationErrors)[0]; firstErr != nil {
+			field := firstErr.Field()
+			tag := firstErr.Tag()
+			param := firstErr.Param()
+			msg := utils.TranslateError(field, tag, param)
+			if msg != "" {
+				response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), msg)
+				return
+			}
+		}
+		response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), response.ApiCode.GetMessage(response.ApiCode.MISSINGPARAMETER))
 		return
 	}
 
@@ -149,7 +150,7 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 }
 
 func (s SysAdminServiceImpl) AddSysAdmin(c *gin.Context, addSysAdminDto entity.AddSysAdminDto) {
-	if err := s.validator.Struct(addSysAdminDto); err != nil {
+	if err := validator.New().Struct(addSysAdminDto); err != nil {
 		response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), response.ApiCode.GetMessage(response.ApiCode.MISSINGPARAMETER))
 		return
 	}
@@ -161,8 +162,8 @@ func (s SysAdminServiceImpl) AddSysAdmin(c *gin.Context, addSysAdminDto entity.A
 	response.Success(c, nil)
 }
 
-var sysAdminService = NewSysAdminServiceImpl()
+var sysAdminService = SysAdminServiceImpl{}
 
 func SysAdminService() ISysAdminService {
-	return sysAdminService
+	return &sysAdminService
 }
