@@ -151,6 +151,16 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 
 func (s SysAdminServiceImpl) AddSysAdmin(c *gin.Context, addSysAdminDto entity.AddSysAdminDto) {
 	if err := validator.New().Struct(addSysAdminDto); err != nil {
+		if firstErr := err.(validator.ValidationErrors)[0]; firstErr != nil {
+			field := firstErr.Field()
+			tag := firstErr.Tag()
+			param := firstErr.Param()
+			msg := utils.TranslateError(field, tag, param)
+			if msg != "" {
+				response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), msg)
+				return
+			}
+		}
 		response.Failed(c, int(response.ApiCode.MISSINGPARAMETER), response.ApiCode.GetMessage(response.ApiCode.MISSINGPARAMETER))
 		return
 	}
