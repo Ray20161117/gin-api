@@ -101,6 +101,69 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/post/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取岗位列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "岗位列表(分页)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "岗位名称",
+                        "name": "postName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "岗位状态:1启用,2禁用",
+                        "name": "postStatus",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "开始时间",
+                        "name": "beginTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间",
+                        "name": "endTime",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

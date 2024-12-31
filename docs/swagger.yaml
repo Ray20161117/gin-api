@@ -136,6 +136,46 @@ paths:
       summary: 用户登录接口
       tags:
       - 用户管理
+  /api/post/list:
+    get:
+      description: 获取岗位列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      - description: 岗位名称
+        in: query
+        name: postName
+        type: string
+      - description: 岗位状态:1启用,2禁用
+        in: query
+        name: postStatus
+        type: string
+      - description: 开始时间
+        in: query
+        name: beginTime
+        type: string
+      - description: 结束时间
+        in: query
+        name: endTime
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 岗位列表(分页)
+      tags:
+      - 岗位管理
 securityDefinitions:
   ApiKeyAuth:
     in: header
