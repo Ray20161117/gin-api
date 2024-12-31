@@ -44,6 +44,35 @@ func AddSysAdmin(dto entity.AddSysAdminDto) bool {
 	if err := tx.Where("username = ?", dto.Username).First(&existingSysAdmin).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// 用户未找到，继续添加新用户
+			sysAdmin := entity.SysAdmin{
+				PostId:     dto.PostId,
+				DeptId:     dto.DeptId,
+				Username:   dto.Username,
+				Nickname:   dto.Nickname,
+				Password:   utils.EncryptionMd5(dto.Password),
+				Phone:      dto.Phone,
+				Email:      dto.Email,
+				Note:       dto.Note,
+				Status:     dto.Status,
+				CreateTime: utils.HTime{Time: time.Now()},
+			}
+			if err := tx.Create(&sysAdmin).Error; err != nil {
+				tx.Rollback()
+				return false
+			}
+
+			// 创建SysAdminRole记录
+			sysAdminRole := entity.SysAdminRole{
+				AdminId: sysAdmin.ID,
+				RoleId:  dto.RoleId,
+			}
+			if err := tx.Create(&sysAdminRole).Error; err != nil {
+				tx.Rollback()
+				return false
+			}
+
+			tx.Commit() // 提交事务
+			return true
 		} else {
 			tx.Rollback()
 			return false
@@ -52,37 +81,6 @@ func AddSysAdmin(dto entity.AddSysAdminDto) bool {
 		tx.Rollback()
 		return false
 	}
-
-	// 创建SysAdmin记录
-	sysAdmin := entity.SysAdmin{
-		PostId:     dto.PostId,
-		DeptId:     dto.DeptId,
-		Username:   dto.Username,
-		Nickname:   dto.Nickname,
-		Password:   utils.EncryptionMd5(dto.Password),
-		Phone:      dto.Phone,
-		Email:      dto.Email,
-		Note:       dto.Note,
-		Status:     dto.Status,
-		CreateTime: utils.HTime{Time: time.Now()},
-	}
-	if err := tx.Create(&sysAdmin).Error; err != nil {
-		tx.Rollback()
-		return false
-	}
-
-	// 创建SysAdminRole记录
-	sysAdminRole := entity.SysAdminRole{
-		AdminId: sysAdmin.ID,
-		RoleId:  dto.RoleId,
-	}
-	if err := tx.Create(&sysAdminRole).Error; err != nil {
-		tx.Rollback()
-		return false
-	}
-
-	tx.Commit() // 提交事务
-	return true
 }
 
 // 根据id删除用户
