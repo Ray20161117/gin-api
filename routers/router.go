@@ -56,9 +56,9 @@ func register(router *gin.Engine) {
 
 		// // 岗位接口
 		jwt.GET("/post/list", controllers.GetSysPostList)
-		// jwt.POST("/post/add", controller.CreateSysPost)
+		jwt.POST("/post/add", controllers.AddSysPost)
+		jwt.PUT("/post/update", controllers.UpdateSysPost)
 		// jwt.GET("/post/info", controller.GetSysPostById)
-		// jwt.PUT("/post/update", controller.UpdateSysPost)
 		// jwt.DELETE("/post/delete", controller.DeleteSysPostById)
 		// jwt.DELETE("/post/batch/delete", controller.BatchDeleteSysPost)
 		// jwt.PUT("/post/updateStatus", controller.UpdateSysPostStatus)
