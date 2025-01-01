@@ -19,7 +19,7 @@ type ISysAdminService interface {
 	// 登录
 	Login(c *gin.Context, loginDto entity.LoginDto)
 	// 新增
-	AddSysAdmin(c *gin.Context, dto entity.AddSysAdminDto)
+	AddSysAdmin(c *gin.Context, addSysAdminDto entity.AddSysAdminDto)
 	// 根据ID查询详情
 	//GetSysAdminInfo(c *gin.Context, Id int)
 	// 编辑

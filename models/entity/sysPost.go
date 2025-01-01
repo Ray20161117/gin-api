@@ -37,6 +37,7 @@ type UpdateSysPostStatusDto struct {
 }
 
 // 新增岗位
+// swagger:model AddSysPost
 type AddSysPostDto struct {
 	PostCode   string `json:"postCode" validator:"required"`   // 岗位编码
 	PostName   string `json:"postName" validator:"required"`   // 岗位名称

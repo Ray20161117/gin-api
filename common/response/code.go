@@ -34,6 +34,7 @@ type Codes struct {
 	QUERYPERMISSIONFAILED                   uint
 	MISSINGPARAMETER                        uint
 	ADDUSERFAILED                           uint
+	INVALID_PARAMS                          uint
 }
 
 // ApiCode 状态码
@@ -66,6 +67,7 @@ var ApiCode = &Codes{
 	QUERYPERMISSIONFAILED:                   427,
 	MISSINGPARAMETER:                        428,
 	ADDUSERFAILED:                           429,
+	INVALID_PARAMS:                          430,
 }
 
 // 状态信息
@@ -99,6 +101,7 @@ func init() {
 		ApiCode.QUERYPERMISSIONFAILED:                   "获取权限失败",
 		ApiCode.MISSINGPARAMETER:                        "缺少参数",
 		ApiCode.ADDUSERFAILED:                           "新增用户失败",
+		ApiCode.INVALID_PARAMS:                          "参数错误",
 	}
 }
 

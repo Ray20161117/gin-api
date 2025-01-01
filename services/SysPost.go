@@ -5,14 +5,18 @@ package services
 
 import (
 	"gin-api/common/response"
+	"gin-api/common/utils"
 	"gin-api/models/dto"
+	"gin-api/models/entity"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 // ISysPostService 岗位业务接口
 type ISysPostService interface {
 	GetList(c *gin.Context, Page, PageSize int, PostName, PostStatus, BeginTime, EndTime string)
+	AddSysPost(c *gin.Context, dto entity.AddSysPostDto)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -45,4 +49,24 @@ func (s SysPostServiceImpl) GetList(c *gin.Context, PageNum, PageSize int,
 	}
 	response.Success(c, map[string]interface{}{"total": count, "pageSize": PageSize,
 		"pageNum": PageNum, "list": sysPost})
+}
+
+// 新增岗位
+func (s SysPostServiceImpl) AddSysPost(c *gin.Context, addSysPostDto entity.AddSysPostDto) {
+	if err := validator.New().Struct(addSysPostDto); err != nil {
+		if firstError := err.(validator.ValidationErrors)[0]; firstError != nil {
+			msg := utils.TranslateError(firstError.Field(), firstError.Tag(), firstError.Param())
+			if msg != "" {
+				response.Failed(c, int(response.ApiCode.INVALID_PARAMS), msg)
+				return
+			}
+		}
+		response.Failed(c, int(response.ApiCode.INVALID_PARAMS), response.ApiCode.GetMessage(response.ApiCode.INVALID_PARAMS))
+		return
+	}
+	bool := dto.AddSysPost(addSysPostDto)
+	if !bool {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+	}
+	response.Success(c, nil)
 }

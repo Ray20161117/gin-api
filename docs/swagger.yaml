@@ -42,6 +42,21 @@ definitions:
     - status
     - username
     type: object
+  entity.AddSysPostDto:
+    properties:
+      postCode:
+        description: 岗位编码
+        type: string
+      postName:
+        description: 岗位名称
+        type: string
+      postStatus:
+        description: 岗位状态(1:正常 2:停用)
+        type: integer
+      remark:
+        description: 备注
+        type: string
+    type: object
   entity.LoginDto:
     properties:
       captcha:
@@ -136,6 +151,28 @@ paths:
       summary: 用户登录接口
       tags:
       - 用户管理
+  /api/post/add:
+    post:
+      description: 新增岗位
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.AddSysPostDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 新增岗位
+      tags:
+      - 岗位管理
   /api/post/list:
     get:
       description: 获取岗位列表

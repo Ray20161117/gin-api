@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"gin-api/models/entity"
 	"gin-api/services"
 	"strconv"
 
@@ -34,4 +35,19 @@ func GetSysPostList(c *gin.Context) {
 	BeginTime := c.Query("beginTime")
 	EndTime := c.Query("endTime")
 	services.SysPostService().GetList(c, Page, pageSize, PostName, PostStatus, BeginTime, EndTime)
+}
+
+// 新增岗位
+// @Tags 岗位管理
+// @Summary 新增岗位
+// @Produce  json
+// @Description 新增岗位
+// @Param data body entity.AddSysPostDto true "请求参数"
+// @Success 200 {object} response.Result
+// @Router /api/post/add [post]
+// @Security ApiKeyAuth
+func AddSysPost(c *gin.Context) {
+	var dto entity.AddSysPostDto
+	_ = c.ShouldBindJSON(&dto)
+	services.SysPostService().AddSysPost(c, dto)
 }

@@ -102,6 +102,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/post/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "新增岗位",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "新增岗位",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.AddSysPostDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/list": {
             "get": {
                 "security": [
@@ -219,6 +255,27 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.AddSysPostDto": {
+            "type": "object",
+            "properties": {
+                "postCode": {
+                    "description": "岗位编码",
+                    "type": "string"
+                },
+                "postName": {
+                    "description": "岗位名称",
+                    "type": "string"
+                },
+                "postStatus": {
+                    "description": "岗位状态(1:正常 2:停用)",
+                    "type": "integer"
+                },
+                "remark": {
+                    "description": "备注",
                     "type": "string"
                 }
             }
