@@ -79,6 +79,24 @@ definitions:
     - password
     - username
     type: object
+  entity.UpdateSysPostDto:
+    properties:
+      id:
+        description: 岗位ID
+        type: integer
+      postCode:
+        description: 岗位编码
+        type: string
+      postName:
+        description: 岗位名称
+        type: string
+      postStatus:
+        description: 岗位状态(1:正常 2:停用)
+        type: integer
+      remark:
+        description: 备注
+        type: string
+    type: object
   response.Result:
     properties:
       code:
@@ -211,6 +229,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 岗位列表(分页)
+      tags:
+      - 岗位管理
+  /api/post/update:
+    put:
+      description: 编辑岗位
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateSysPostDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑岗位
       tags:
       - 岗位管理
 securityDefinitions:

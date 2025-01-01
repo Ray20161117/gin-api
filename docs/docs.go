@@ -200,6 +200,42 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/post/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "编辑岗位",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "编辑岗位",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.UpdateSysPostDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -305,6 +341,31 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UpdateSysPostDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "岗位ID",
+                    "type": "integer"
+                },
+                "postCode": {
+                    "description": "岗位编码",
+                    "type": "string"
+                },
+                "postName": {
+                    "description": "岗位名称",
+                    "type": "string"
+                },
+                "postStatus": {
+                    "description": "岗位状态(1:正常 2:停用)",
+                    "type": "integer"
+                },
+                "remark": {
+                    "description": "备注",
                     "type": "string"
                 }
             }

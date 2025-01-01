@@ -38,6 +38,7 @@ func GetSysPostList(PageNum, PageSize int, PostName, PostStatus, BeginTime, EndT
 	return sysPost, count, nil
 }
 
+// 新增岗位
 func AddSysPost(addSysPostDto entity.AddSysPostDto) bool {
 	tx := db.Db.Begin()
 	if tx.Error != nil {
@@ -60,6 +61,47 @@ func AddSysPost(addSysPostDto entity.AddSysPostDto) bool {
 				tx.Commit() // 提交事务
 				return true
 			}
+		} else {
+			tx.Rollback()
+			return false
+		}
+	} else {
+		tx.Rollback()
+		return false
+	}
+}
+
+// 更新岗位
+func UpdateSysPost(updateSysPostDto entity.UpdateSysPostDto) bool {
+	tx := db.Db.Begin()
+	if tx.Error != nil {
+		return false
+	}
+	var exittingSysPost entity.SysPost
+	if err := tx.Where("post_code = ?", updateSysPostDto.PostCode).
+		Or("post_name = ?", updateSysPostDto.PostName).
+		Not("id = ?", updateSysPostDto.Id).
+		First(&exittingSysPost).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			var updateSysPost entity.SysPost
+			if err := tx.First(&updateSysPost, updateSysPostDto.Id).Error; err != nil {
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					return false
+				}
+				tx.Rollback()
+				return false
+			}
+			updateSysPost.PostCode = updateSysPostDto.PostCode
+			updateSysPost.PostName = updateSysPostDto.PostName
+			updateSysPost.PostStatus = updateSysPostDto.PostStatus
+			updateSysPost.Remark = updateSysPostDto.Remark
+
+			if err := tx.Save(&updateSysPost).Error; err != nil {
+				tx.Rollback()
+				return false
+			}
+			tx.Commit() // 提交事务
+			return true
 		} else {
 			tx.Rollback()
 			return false

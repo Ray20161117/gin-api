@@ -51,3 +51,18 @@ func AddSysPost(c *gin.Context) {
 	_ = c.ShouldBindJSON(&dto)
 	services.SysPostService().AddSysPost(c, dto)
 }
+
+// 编辑岗位
+// @Tags 岗位管理
+// @Summary 编辑岗位
+// @Produce  json
+// @Description 编辑岗位
+// @Param data body entity.UpdateSysPostDto true "请求参数"
+// @Success 200 {object} response.Result
+// @Router /api/post/update [put]
+// @Security ApiKeyAuth
+func UpdateSysPost(c *gin.Context) {
+	var dto entity.UpdateSysPostDto
+	_ = c.ShouldBindJSON(&dto)
+	services.SysPostService().UpdateSysPost(c, dto)
+}

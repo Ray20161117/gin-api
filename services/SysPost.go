@@ -16,7 +16,8 @@ import (
 // ISysPostService 岗位业务接口
 type ISysPostService interface {
 	GetList(c *gin.Context, Page, PageSize int, PostName, PostStatus, BeginTime, EndTime string)
-	AddSysPost(c *gin.Context, dto entity.AddSysPostDto)
+	AddSysPost(c *gin.Context, addSysPostDto entity.AddSysPostDto)
+	UpdateSysPost(c *gin.Context, updateSysPostDto entity.UpdateSysPostDto)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -65,6 +66,26 @@ func (s SysPostServiceImpl) AddSysPost(c *gin.Context, addSysPostDto entity.AddS
 		return
 	}
 	bool := dto.AddSysPost(addSysPostDto)
+	if !bool {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+	}
+	response.Success(c, nil)
+}
+
+// 编辑岗位
+func (s SysPostServiceImpl) UpdateSysPost(c *gin.Context, updateSysPostDto entity.UpdateSysPostDto) {
+	if err := validator.New().Struct(updateSysPostDto); err != nil {
+		if firstError := err.(validator.ValidationErrors)[0]; firstError != nil {
+			msg := utils.TranslateError(firstError.Field(), firstError.Tag(), firstError.Param())
+			if msg != "" {
+				response.Failed(c, int(response.ApiCode.INVALID_PARAMS), msg)
+				return
+			}
+		}
+		response.Failed(c, int(response.ApiCode.INVALID_PARAMS), response.ApiCode.GetMessage(response.ApiCode.INVALID_PARAMS))
+		return
+	}
+	bool := dto.UpdateSysPost(updateSysPostDto)
 	if !bool {
 		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
 	}
