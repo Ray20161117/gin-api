@@ -6,6 +6,7 @@ package services
 import (
 	"gin-api/common/response"
 	"gin-api/common/utils"
+	"gin-api/config/yaml_config"
 	"gin-api/models/dto"
 	"gin-api/models/entity"
 	"gin-api/pkg/jwt"
@@ -94,7 +95,7 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 		response.Failed(c, int(response.ApiCode.STATUSISENABLE), response.ApiCode.GetMessage(response.ApiCode.STATUSISENABLE))
 		return
 	}
-
+	sysAdmin.Icon = yaml_config.Cfg.Upload.Host + sysAdmin.Icon // 头像拼接路径
 	// 生成token
 	tokenString, err := jwt.GenerateTokenByAdmin(sysAdmin)
 	if err != nil {
