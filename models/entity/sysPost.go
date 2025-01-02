@@ -48,3 +48,9 @@ type UpdateSysPostDto struct {
 	PostStatus int    `json:"postStatus" validator:"required"` // 岗位状态(1:正常 2:停用)
 	Remark     string `json:"remark"`                          // 备注
 }
+
+// 供其它模块使用的岗位模型
+type SysPostListDto struct {
+	Id       uint   `json:"id"`       // 岗位ID
+	PostName string `json:"postName"` // 岗位名称
+}

@@ -124,3 +124,15 @@ func ChangedSysPostStatus(c *gin.Context) {
 	_ = c.ShouldBindJSON(&dto)
 	services.SysPostService().ChangedSysPostStatus(c, dto)
 }
+
+// 获取岗位列表(下拉框)
+// @Tags 岗位管理
+// @Summary 获取岗位列表(下拉框)
+// @Produce  json
+// @Description 获取岗位列表(下拉框)
+// @Success 200 {object} response.Result
+// @Router /api/post/select [get]
+// @Security ApiKeyAuth
+func GetSysVoListForSelect(c *gin.Context) {
+	services.SysPostService().GetSysVoListForSelect(c)
+}

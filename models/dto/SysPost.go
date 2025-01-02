@@ -170,3 +170,11 @@ func ChangeSysPostStatus(id int, status int) bool {
 	tx.Commit() // 提交事务
 	return true
 }
+
+// 供其它模块使用岗位列表
+func GetSysPostListForSelect() (sysPostListDto []entity.SysPostListDto, err error) {
+	if err := db.Db.Table("sys_post").Where("post_status = ?", 1).Select("id,post_name").Scan(&sysPostListDto).Error; err != nil {
+		return sysPostListDto, err
+	}
+	return sysPostListDto, nil
+}

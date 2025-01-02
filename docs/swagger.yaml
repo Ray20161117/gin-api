@@ -334,6 +334,21 @@ paths:
       summary: 岗位列表(分页)
       tags:
       - 岗位管理
+  /api/post/select:
+    get:
+      description: 获取岗位列表(下拉框)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取岗位列表(下拉框)
+      tags:
+      - 岗位管理
   /api/post/update:
     put:
       description: 编辑岗位

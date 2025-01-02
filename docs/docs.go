@@ -341,6 +341,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/post/select": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取岗位列表(下拉框)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "获取岗位列表(下拉框)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/update": {
             "put": {
                 "security": [

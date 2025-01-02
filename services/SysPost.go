@@ -22,6 +22,7 @@ type ISysPostService interface {
 	DeleteSysPostById(c *gin.Context, id int)
 	DeleteSysPostByIds(c *gin.Context, batchDelSysPostDto entity.BatchDelSysPostDto)
 	ChangedSysPostStatus(c *gin.Context, updateSysPostStatusDto entity.UpdateSysPostStatusDto)
+	GetSysVoListForSelect(c *gin.Context)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -150,4 +151,14 @@ func (s SysPostServiceImpl) ChangedSysPostStatus(c *gin.Context, updateSysPostSt
 		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
 		return
 	}
+}
+
+// 获取岗位列表(下拉框)
+func (s SysPostServiceImpl) GetSysVoListForSelect(c *gin.Context) {
+	sysPostVoList, err := dto.GetSysPostListForSelect()
+	if err != nil {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+		return
+	}
+	response.Success(c, sysPostVoList)
 }
