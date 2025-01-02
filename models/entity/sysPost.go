@@ -20,11 +20,6 @@ func (SysPost) TableName() string {
 	return "sys_post"
 }
 
-// 根据岗位ID操作SysPost
-type OperateSysPostByIdDto struct {
-	Id uint `json:"id"` // 岗位ID
-}
-
 // 批量伤处岗位
 type BatchDelSysPostDto struct {
 	Ids []uint `json:"ids"` // 岗位ID数组

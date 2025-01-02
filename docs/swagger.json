@@ -130,6 +130,42 @@
                 }
             }
         },
+        "/api/post/batchDel": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "批量删除岗位",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "批量删除岗位",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.BatchDelSysPostDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/del/{postId}": {
             "delete": {
                 "security": [
@@ -373,6 +409,18 @@
                 "remark": {
                     "description": "备注",
                     "type": "string"
+                }
+            }
+        },
+        "entity.BatchDelSysPostDto": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "description": "岗位ID数组",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

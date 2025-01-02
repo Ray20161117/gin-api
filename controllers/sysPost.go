@@ -94,3 +94,18 @@ func DelSysPostById(c *gin.Context) {
 	postId, _ := strconv.Atoi(c.Param("postId"))
 	services.SysPostService().DeleteSysPostById(c, postId)
 }
+
+// 批量删除岗位
+// @Tags 岗位管理
+// @Summary 批量删除岗位
+// @Produce  json
+// @Description 批量删除岗位
+// @Param data body entity.BatchDelSysPostDto true "请求参数" example:"{ids: [1,2,3]}"
+// @Success 200 {object} response.Result
+// @Router /api/post/batchDel [delete]
+// @Security ApiKeyAuth
+func BatchDelSysPostByIds(c *gin.Context) {
+	var dto entity.BatchDelSysPostDto
+	_ = c.ShouldBindJSON(&dto)
+	services.SysPostService().DeleteSysPostByIds(c, dto)
+}

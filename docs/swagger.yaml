@@ -57,6 +57,14 @@ definitions:
         description: 备注
         type: string
     type: object
+  entity.BatchDelSysPostDto:
+    properties:
+      ids:
+        description: 岗位ID数组
+        items:
+          type: integer
+        type: array
+    type: object
   entity.LoginDto:
     properties:
       captcha:
@@ -189,6 +197,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 新增岗位
+      tags:
+      - 岗位管理
+  /api/post/batchDel:
+    delete:
+      description: 批量删除岗位
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.BatchDelSysPostDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除岗位
       tags:
       - 岗位管理
   /api/post/del/{postId}:

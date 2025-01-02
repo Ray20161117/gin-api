@@ -133,3 +133,20 @@ func DeleteSysPostById(id int) bool {
 	tx.Commit() // 提交事务
 	return true
 }
+
+// 批量删除岗位
+func DeleteSysPostByIds(ids []uint) bool {
+	if len(ids) == 0 {
+		return false // 如果没有提供任何ID，则无需进行删除操作，直接返回nil
+	}
+	tx := db.Db.Begin()
+	if tx.Error != nil {
+		return false
+	}
+	if err := tx.Delete(&entity.SysPost{}, ids).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
+	tx.Commit() // 提交事务
+	return true
+}
