@@ -111,3 +111,11 @@ func UpdateSysPost(updateSysPostDto entity.UpdateSysPostDto) bool {
 		return false
 	}
 }
+
+// 岗位详情
+func GetSysPostDetail(id int) (sysPost entity.SysPost, err error) {
+	if err := db.Db.First(&sysPost, id).Error; err != nil {
+		return sysPost, err
+	}
+	return sysPost, nil
+}

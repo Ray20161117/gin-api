@@ -18,6 +18,7 @@ type ISysPostService interface {
 	GetList(c *gin.Context, Page, PageSize int, PostName, PostStatus, BeginTime, EndTime string)
 	AddSysPost(c *gin.Context, addSysPostDto entity.AddSysPostDto)
 	UpdateSysPost(c *gin.Context, updateSysPostDto entity.UpdateSysPostDto)
+	GetSysPostDetail(c *gin.Context, id int)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -90,4 +91,14 @@ func (s SysPostServiceImpl) UpdateSysPost(c *gin.Context, updateSysPostDto entit
 		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
 	}
 	response.Success(c, nil)
+}
+
+// 岗位详情
+func (s SysPostServiceImpl) GetSysPostDetail(c *gin.Context, id int) {
+	sysPost, err := dto.GetSysPostDetail(id)
+	if err != nil {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+		return
+	}
+	response.Success(c, sysPost)
 }
