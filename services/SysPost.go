@@ -19,6 +19,7 @@ type ISysPostService interface {
 	AddSysPost(c *gin.Context, addSysPostDto entity.AddSysPostDto)
 	UpdateSysPost(c *gin.Context, updateSysPostDto entity.UpdateSysPostDto)
 	GetSysPostDetail(c *gin.Context, id int)
+	DeleteSysPostById(c *gin.Context, id int)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -101,4 +102,15 @@ func (s SysPostServiceImpl) GetSysPostDetail(c *gin.Context, id int) {
 		return
 	}
 	response.Success(c, sysPost)
+}
+
+// 删除岗位(单个)
+func (s SysPostServiceImpl) DeleteSysPostById(c *gin.Context, id int) {
+	bool := dto.DeleteSysPostById(id)
+	if bool {
+		response.Success(c, nil)
+	} else {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+		return
+	}
 }

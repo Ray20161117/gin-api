@@ -191,6 +191,48 @@ paths:
       summary: 新增岗位
       tags:
       - 岗位管理
+  /api/post/del/{postId}:
+    delete:
+      description: 删除岗位
+      parameters:
+      - description: 岗位ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除岗位
+      tags:
+      - 岗位管理
+  /api/post/info/{postId}:
+    get:
+      description: 获取岗位详情
+      parameters:
+      - description: 岗位ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取岗位详情
+      tags:
+      - 岗位管理
   /api/post/list:
     get:
       description: 获取岗位列表

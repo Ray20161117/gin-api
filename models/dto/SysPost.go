@@ -119,3 +119,17 @@ func GetSysPostDetail(id int) (sysPost entity.SysPost, err error) {
 	}
 	return sysPost, nil
 }
+
+// 删除岗位
+func DeleteSysPostById(id int) bool {
+	tx := db.Db.Begin()
+	if tx.Error != nil {
+		return false
+	}
+	if err := tx.Delete(&entity.SysPost{}, id).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
+	tx.Commit() // 提交事务
+	return true
+}

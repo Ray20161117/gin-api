@@ -130,6 +130,74 @@
                 }
             }
         },
+        "/api/post/del/{postId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除岗位",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "删除岗位",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "岗位ID",
+                        "name": "postId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/info/{postId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取岗位详情",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "获取岗位详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "岗位ID",
+                        "name": "postId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/list": {
             "get": {
                 "security": [

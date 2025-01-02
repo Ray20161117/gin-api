@@ -74,9 +74,23 @@ func UpdateSysPost(c *gin.Context) {
 // @Description 获取岗位详情
 // @Param postId path int true "岗位ID"
 // @Success 200 {object} response.Result
-// @Router /api/post/{postId} [get]
+// @Router /api/post/info/{postId} [get]
 // @Security ApiKeyAuth
 func GetSysPostDetail(c *gin.Context) {
 	postId, _ := strconv.Atoi(c.Param("postId"))
 	services.SysPostService().GetSysPostDetail(c, postId)
+}
+
+// 删除岗位
+// @Tags 岗位管理
+// @Summary 删除岗位
+// @Produce  json
+// @Description 删除岗位
+// @Param postId path int true "岗位ID"
+// @Success 200 {object} response.Result
+// @Router /api/post/del/{postId} [delete]
+// @Security ApiKeyAuth
+func DelSysPostById(c *gin.Context) {
+	postId, _ := strconv.Atoi(c.Param("postId"))
+	services.SysPostService().DeleteSysPostById(c, postId)
 }
