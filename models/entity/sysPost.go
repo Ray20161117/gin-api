@@ -27,8 +27,8 @@ type BatchDelSysPostDto struct {
 
 // 修改岗位状态
 type UpdateSysPostStatusDto struct {
-	Id         uint `json:"id"`         // 岗位ID
-	PostStatus int  `json:"postStatus"` // 岗位状态(1:正常 2:停用)
+	Id         uint `json:"id" validator:"required"`         // 岗位ID
+	PostStatus int  `json:"postStatus" validator:"required"` // 岗位状态(1:正常 2:停用)
 }
 
 // 新增岗位

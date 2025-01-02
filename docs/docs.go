@@ -174,6 +174,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/post/changeStatus": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "改变岗位状态",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "岗位管理"
+                ],
+                "summary": "改变岗位状态",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.UpdateSysPostStatusDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/del/{postId}": {
             "delete": {
                 "security": [
@@ -483,6 +519,19 @@ const docTemplate = `{
                 "remark": {
                     "description": "备注",
                     "type": "string"
+                }
+            }
+        },
+        "entity.UpdateSysPostStatusDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "岗位ID",
+                    "type": "integer"
+                },
+                "postStatus": {
+                    "description": "岗位状态(1:正常 2:停用)",
+                    "type": "integer"
                 }
             }
         },

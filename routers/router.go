@@ -61,7 +61,7 @@ func register(router *gin.Engine) {
 		jwt.GET("/post/info/:postId", controllers.GetSysPostDetail)
 		jwt.DELETE("/post/del/:postId", controllers.DelSysPostById)
 		jwt.DELETE("/post/batchDel", controllers.BatchDelSysPostByIds)
-		// jwt.PUT("/post/updateStatus", controller.UpdateSysPostStatus)
+		jwt.PUT("/post/updateStatus", controllers.ChangedSysPostStatus)
 		// jwt.GET("/post/vo/list", controller.QuerySysPostVoList)
 
 		// // 部门接口

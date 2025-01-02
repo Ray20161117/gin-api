@@ -150,3 +150,23 @@ func DeleteSysPostByIds(ids []uint) bool {
 	tx.Commit() // 提交事务
 	return true
 }
+
+// 变更岗位状态
+func ChangeSysPostStatus(id int, status int) bool {
+	tx := db.Db.Begin()
+	if tx.Error != nil {
+		return false
+	}
+	var sysPost entity.SysPost
+	if err := tx.First(&sysPost, id).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
+	sysPost.PostStatus = status
+	if err := tx.Save(&sysPost).Error; err != nil {
+		tx.Rollback()
+		return false
+	}
+	tx.Commit() // 提交事务
+	return true
+}

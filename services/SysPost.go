@@ -21,6 +21,7 @@ type ISysPostService interface {
 	GetSysPostDetail(c *gin.Context, id int)
 	DeleteSysPostById(c *gin.Context, id int)
 	DeleteSysPostByIds(c *gin.Context, batchDelSysPostDto entity.BatchDelSysPostDto)
+	ChangedSysPostStatus(c *gin.Context, updateSysPostStatusDto entity.UpdateSysPostStatusDto)
 }
 
 // SysPostServiceImpl 实现接口业务的结构体
@@ -121,6 +122,30 @@ func (s SysPostServiceImpl) DeleteSysPostByIds(c *gin.Context, batchDelSysPostDt
 	bool := dto.DeleteSysPostByIds(batchDelSysPostDto.Ids)
 	if bool {
 		response.Success(c, nil)
+	} else {
+		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
+		return
+	}
+}
+
+// 改变岗位状态
+func (s SysPostServiceImpl) ChangedSysPostStatus(c *gin.Context, updateSysPostStatusDto entity.UpdateSysPostStatusDto) {
+	if err := validator.New().Struct(updateSysPostStatusDto); err != nil {
+		if firstError := err.(validator.ValidationErrors)[0]; firstError != nil {
+			msg := utils.TranslateError(firstError.Field(), firstError.Tag(), firstError.Param())
+			if msg != "" {
+				response.Failed(c, int(response.ApiCode.INVALID_PARAMS), msg)
+				return
+			}
+
+		}
+		response.Failed(c, int(response.ApiCode.INVALID_PARAMS), response.ApiCode.GetMessage(response.ApiCode.INVALID_PARAMS))
+		return
+	}
+	bool := dto.ChangeSysPostStatus(int(updateSysPostStatusDto.Id), int(updateSysPostStatusDto.PostStatus))
+	if bool {
+		response.Success(c, nil)
+		return
 	} else {
 		response.Failed(c, int(response.ApiCode.FAILED), response.ApiCode.GetMessage(response.ApiCode.FAILED))
 		return

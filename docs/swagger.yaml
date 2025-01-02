@@ -105,6 +105,15 @@ definitions:
         description: 备注
         type: string
     type: object
+  entity.UpdateSysPostStatusDto:
+    properties:
+      id:
+        description: 岗位ID
+        type: integer
+      postStatus:
+        description: 岗位状态(1:正常 2:停用)
+        type: integer
+    type: object
   response.Result:
     properties:
       code:
@@ -219,6 +228,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 批量删除岗位
+      tags:
+      - 岗位管理
+  /api/post/changeStatus:
+    put:
+      description: 改变岗位状态
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateSysPostStatusDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+      security:
+      - ApiKeyAuth: []
+      summary: 改变岗位状态
       tags:
       - 岗位管理
   /api/post/del/{postId}:

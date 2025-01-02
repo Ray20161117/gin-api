@@ -109,3 +109,18 @@ func BatchDelSysPostByIds(c *gin.Context) {
 	_ = c.ShouldBindJSON(&dto)
 	services.SysPostService().DeleteSysPostByIds(c, dto)
 }
+
+// 改变岗位状态
+// @Tags 岗位管理
+// @Summary 改变岗位状态
+// @Produce  json
+// @Description 改变岗位状态
+// @Param data body entity.UpdateSysPostStatusDto true "请求参数"
+// @Success 200 {object} response.Result
+// @Router /api/post/changeStatus [put]
+// @Security ApiKeyAuth
+func ChangedSysPostStatus(c *gin.Context) {
+	var dto entity.UpdateSysPostStatusDto
+	_ = c.ShouldBindJSON(&dto)
+	services.SysPostService().ChangedSysPostStatus(c, dto)
+}
