@@ -12,7 +12,7 @@ db:
   dialects: mysql
   host: 127.0.0.1
   port: 3308
-  database: go-gin
+  database: gin-api
   username: root
   password: 123456
   charset: utf8
@@ -52,23 +52,24 @@ upload:
   maxNum: 10
   # 允许上传的文件类型 (注意：后缀名全部小写)
   allowExt:
-    - jpg
-    - jpeg
-    - png
-    - gif
-    - bmp
-    - svg
-    - pdf
-    - doc
-    - docx
-    - xls
-    - xlsx
-    - ppt
-    - pptx
+    - .jpg
+    - .jpeg
+    - .png
+    - .gif
+    - .bmp
+    - .webp
+    - .svg
+    - .pdf
+    - .doc
+    - .docx
+    - .xls
+    - .xlsx
+    - .ppt
+    - .pptx
 
 # 密钥配置
 app:
   #用于生成token的密钥,可以根据实际需要进行修改配置
-  jwtSecret: go-gin
+  jwtSecret: gin-api
   # token过期时间(单位：小时)
   jwtTokenExpire: 24
