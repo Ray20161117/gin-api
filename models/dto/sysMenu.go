@@ -4,34 +4,78 @@
 package dto
 
 import (
+	"errors"
 	"gin-api/models/entity"
 	"gin-api/pkg/db"
 	"log"
 )
 
 // 菜单树结构
-func buildMenuTree(menuList []entity.LeftMenuVoDto) (menuTree []entity.LeftMenuVoDto, err error) {
+func buildMenuTree(menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, err error) {
+	// 使用map来存储以ParentId为键的子菜单列表
+	childrenMap := make(map[uint][]entity.SysMenu)
+	topMenusDto := make([]entity.LeftMenuVoDto, 0)
+
+	// 遍历menuList，填充childrenMap，并创建topMenusDto
 	for _, item := range menuList {
+		childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 		if item.ParentId == 0 {
-			item.MenuSvoList = findChildMenu(menuList, item.Id)
-			menuTree = append(menuTree, item)
+			// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
+			topMenuDto := entity.LeftMenuVoDto{
+				Id:          item.ID,
+				MenuName:    item.MenuName,
+				Icon:        item.Icon,
+				Url:         item.Url,
+				MenuSvoList: []entity.MenuSvoDto{},
+				// 复制其他的所需字段...
+			}
+			topMenusDto = append(topMenusDto, topMenuDto)
 		}
 	}
-	return menuTree, nil
+
+	// 如果没有找到顶层菜单，返回错误
+	if len(topMenusDto) == 0 {
+		return nil, errors.New("no top-level menus found")
+	}
+
+	// 遍历顶层菜单，并查找其子菜单
+	for i, item := range topMenusDto {
+		subMenu, err := buildSubMenuTree(item.Id, childrenMap)
+		if err != nil {
+			return nil, err
+		}
+		// 将子菜单赋值给当前顶层菜单
+		topMenusDto[i].MenuSvoList = subMenu
+	}
+
+	return topMenusDto, nil
 }
 
-// 查找子菜单
-func findChildMenu(menuList []entity.LeftMenuVoDto, menuId uint) (childMenuList []entity.LeftMenuVoDto) {
-	for _, item := range menuList {
-		if item.ParentId == menuId {
-			childMenuList = append(childMenuList, item)
-		}
+// 递归构建子菜单树
+func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMenuTree []entity.MenuSvoDto, err error) {
+	childMenusDto := make([]entity.MenuSvoDto, 0)
+	childMenus, exists := childrenMap[menuId]
+	if !exists {
+		return nil, nil // 如果没有子菜单，返回空列表而不是错误
 	}
-	return childMenuList
+
+	for _, item := range childMenus {
+		// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
+		childMenuDto := entity.MenuSvoDto{
+			MenuName: item.MenuName,
+			Icon:     item.Icon,
+			Url:      item.Url,
+			// 复制其他的所需字段...
+		}
+		childMenusDto = append(childMenusDto, childMenuDto)
+	}
+
+	return childMenusDto, nil
 }
 
 // 当前登录用户左侧菜单列表
 func QueryLeftMenuList(Id uint) (leftMenuVo []entity.LeftMenuVoDto, err error) {
+	var sysMenu []entity.SysMenu
 	// 使用链式调用来构建查询语句
 	err = db.Db.Table("sys_menu sm").
 		Select("sm.id, sm.menu_name, sm.url, sm.icon, sm.parent_id").
@@ -42,7 +86,7 @@ func QueryLeftMenuList(Id uint) (leftMenuVo []entity.LeftMenuVoDto, err error) {
 		Where("sm.menu_status = ?", 2).
 		Where("sm.menu_type IN (?)", []int{1, 2}).
 		Order("sm.sort").
-		Find(&leftMenuVo).Error
+		Find(&sysMenu).Error
 
 	// 检查并处理错误
 	if err != nil {
@@ -51,7 +95,7 @@ func QueryLeftMenuList(Id uint) (leftMenuVo []entity.LeftMenuVoDto, err error) {
 	}
 
 	// 构建菜单树
-	leftMenuVo, err = buildMenuTree(leftMenuVo)
+	leftMenuVo, err = buildMenuTree(sysMenu)
 	if err != nil {
 		log.Printf("Error building menu tree for admin ID %d: %v", Id, err)
 		return nil, err

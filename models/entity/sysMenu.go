@@ -44,12 +44,11 @@ type MenuSvoDto struct {
 
 // 左侧菜单vomenuSvoList
 type LeftMenuVoDto struct {
-	Id          uint            `json:"id"`                   // ID
-	ParentId    uint            `json:"parentId"`             // 父id
-	MenuName    string          `json:"menuName"`             // 菜单名称
-	Icon        string          `json:"icon"`                 // 图标
-	Url         string          `json:"url"`                  // url
-	MenuSvoList []LeftMenuVoDto `json:"menuSvoList" gorm:"-"` // 菜单列表
+	Id          uint         `json:"id"`                   // ID
+	MenuName    string       `json:"menuName"`             // 菜单名称
+	Icon        string       `json:"icon"`                 // 图标
+	Url         string       `json:"url"`                  // url
+	MenuSvoList []MenuSvoDto `json:"menuSvoList" gorm:"-"` // 菜单列表
 }
 
 // 权限vo
