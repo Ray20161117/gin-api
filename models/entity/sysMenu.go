@@ -35,14 +35,14 @@ type SysMenuIdDto struct {
 	Id uint `json:"id"` // ID
 }
 
-// 菜单级vo
+// 菜单级vo(子菜单)
 type MenuSvoDto struct {
 	MenuName string `json:"menuName"` // 菜单名称
 	Icon     string `json:"icon"`     // 图标
 	Url      string `json:"url"`      // url
 }
 
-// 左侧菜单vomenuSvoList
+// 左侧菜单vomenuSvoList(顶层菜单)
 type LeftMenuVoDto struct {
 	Id          uint         `json:"id"`                   // ID
 	MenuName    string       `json:"menuName"`             // 菜单名称
