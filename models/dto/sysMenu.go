@@ -27,8 +27,9 @@ func buildMenuTree(menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, 
 				// 复制其他的所需字段...
 			}
 			menuTree = append(menuTree, topMenuDto)
+		} else {
+			childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 		}
-		childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 	}
 
 	// 如果没有找到顶层菜单，返回错误
