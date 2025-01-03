@@ -66,11 +66,16 @@ func getLocation(ip string) string {
 	bytes := ghttp.GetBytes(url)
 	src := string(bytes)
 	srcCharset := "GBK"
-	tmp, _ := gcharset.ToUTF8(srcCharset, src)
-	json, err := gjson.DecodeToJson(tmp)
+	utf8Src, err := gcharset.ToUTF8(srcCharset, src)
 	if err != nil {
-		fmt.Println()
+		return "字符编码转换失败(IP)"
 	}
+
+	json, err := gjson.DecodeToJson(utf8Src)
+	if err != nil {
+		return "解析JSON失败(IP)"
+	}
+
 	if json.GetInt("code") == 0 {
 		addr := json.GetString("addr")
 		return addr
