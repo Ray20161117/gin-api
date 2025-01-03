@@ -11,47 +11,45 @@ import (
 )
 
 // 菜单树结构
-func buildMenuTree(menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, err error) {
+func buildMenuTree(topParentId uint, menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, err error) {
 	// 使用map来存储以ParentId为键的子菜单列表
 	childrenMap := make(map[uint][]entity.SysMenu)
-	// 遍历menuList，填充childrenMap，并创建topMenusDto
+	// 遍历menuList，填充childrenMap
 	for _, item := range menuList {
-		if item.ParentId == 0 {
-			// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
-			topMenuDto := entity.LeftMenuVoDto{
-				Id:          item.ID,
-				MenuName:    item.MenuName,
-				Icon:        item.Icon,
-				Url:         item.Url,
-				MenuSvoList: []entity.MenuSvoDto{},
-				// 复制其他的所需字段...
-			}
-			menuTree = append(menuTree, topMenuDto)
-		} else {
-			childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
-		}
+		childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 	}
 
-	// 如果没有找到顶层菜单，返回错误
-	if len(menuTree) == 0 {
+	// 查找顶层菜单
+	topMenus, exists := childrenMap[topParentId]
+	if !exists {
 		return nil, errors.New("no top-level menus found")
 	}
 
 	// 遍历顶层菜单，并查找其子菜单
-	for i, item := range menuTree {
-		subMenu, err := buildSubMenuTree(item.Id, childrenMap)
+	for _, item := range topMenus {
+		// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
+		topMenuDto := entity.LeftMenuVoDto{
+			Id:          item.ID,
+			MenuName:    item.MenuName,
+			Icon:        item.Icon,
+			Url:         item.Url,
+			MenuSvoList: []entity.LeftMenuVoDto{}, // 注意这里应使用LeftMenuVoDto而不是MenuSvoDto
+		}
+		// 递归调用以构建子菜单树
+		subMenu, err := buildSubMenuTree(item.ID, childrenMap)
 		if err != nil {
 			return nil, err
 		}
 		// 将子菜单赋值给当前顶层菜单
-		menuTree[i].MenuSvoList = subMenu
+		topMenuDto.MenuSvoList = subMenu
+		menuTree = append(menuTree, topMenuDto)
 	}
 
 	return menuTree, nil
 }
 
 // 递归构建子菜单树
-func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMenuTree []entity.MenuSvoDto, err error) {
+func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMenuTree []entity.LeftMenuVoDto, err error) {
 	childMenus, exists := childrenMap[menuId]
 	if !exists {
 		return nil, nil // 如果没有子菜单，返回空列表而不是错误
@@ -59,12 +57,20 @@ func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMe
 
 	for _, item := range childMenus {
 		// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
-		childMenuDto := entity.MenuSvoDto{
-			MenuName: item.MenuName,
-			Icon:     item.Icon,
-			Url:      item.Url,
-			// 复制其他的所需字段...
+		childMenuDto := entity.LeftMenuVoDto{
+			Id:          item.ID,
+			MenuName:    item.MenuName,
+			Icon:        item.Icon,
+			Url:         item.Url,
+			MenuSvoList: []entity.LeftMenuVoDto{}, // 注意这里应使用LeftMenuVoDto而不是MenuSvoDto
 		}
+		// 递归调用以构建下一级子菜单树
+		subSubMenu, err := buildSubMenuTree(item.ID, childrenMap)
+		if err != nil {
+			return nil, err
+		}
+		// 将子子菜单赋值给当前子菜单
+		childMenuDto.MenuSvoList = subSubMenu
 		subMenuTree = append(subMenuTree, childMenuDto)
 	}
 
@@ -93,7 +99,7 @@ func QueryLeftMenuList(Id uint) (leftMenuVo []entity.LeftMenuVoDto, err error) {
 	}
 
 	// 构建菜单树
-	leftMenuVo, err = buildMenuTree(sysMenu)
+	leftMenuVo, err = buildMenuTree(0, sysMenu)
 	if err != nil {
 		log.Printf("Error building menu tree for admin ID %d: %v", Id, err)
 		return nil, err
