@@ -103,7 +103,7 @@ func QueryLeftMenuList(Id uint) (leftMenuVo []entity.LeftMenuVoDto, err error) {
 	return leftMenuVo, nil
 }
 
-// 当前登录用户左侧菜单级列表
+// 当前登录用户左侧菜单级列表(废弃)
 func QueryMenuVoList(AdminId, MenuId uint) (menuSvo []entity.MenuSvoDto, err error) {
 	const status, menuStatus, menuType = 1, 2, 2
 
