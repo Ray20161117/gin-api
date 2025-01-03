@@ -14,11 +14,8 @@ import (
 func buildMenuTree(menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, err error) {
 	// 使用map来存储以ParentId为键的子菜单列表
 	childrenMap := make(map[uint][]entity.SysMenu)
-	topMenusDto := make([]entity.LeftMenuVoDto, 0)
-
 	// 遍历menuList，填充childrenMap，并创建topMenusDto
 	for _, item := range menuList {
-		childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 		if item.ParentId == 0 {
 			// 创建一个新的LeftMenuVoDto实例，并复制需要的字段
 			topMenuDto := entity.LeftMenuVoDto{
@@ -29,31 +26,31 @@ func buildMenuTree(menuList []entity.SysMenu) (menuTree []entity.LeftMenuVoDto, 
 				MenuSvoList: []entity.MenuSvoDto{},
 				// 复制其他的所需字段...
 			}
-			topMenusDto = append(topMenusDto, topMenuDto)
+			menuTree = append(menuTree, topMenuDto)
 		}
+		childrenMap[item.ParentId] = append(childrenMap[item.ParentId], item)
 	}
 
 	// 如果没有找到顶层菜单，返回错误
-	if len(topMenusDto) == 0 {
+	if len(menuTree) == 0 {
 		return nil, errors.New("no top-level menus found")
 	}
 
 	// 遍历顶层菜单，并查找其子菜单
-	for i, item := range topMenusDto {
+	for i, item := range menuTree {
 		subMenu, err := buildSubMenuTree(item.Id, childrenMap)
 		if err != nil {
 			return nil, err
 		}
 		// 将子菜单赋值给当前顶层菜单
-		topMenusDto[i].MenuSvoList = subMenu
+		menuTree[i].MenuSvoList = subMenu
 	}
 
-	return topMenusDto, nil
+	return menuTree, nil
 }
 
 // 递归构建子菜单树
 func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMenuTree []entity.MenuSvoDto, err error) {
-	childMenusDto := make([]entity.MenuSvoDto, 0)
 	childMenus, exists := childrenMap[menuId]
 	if !exists {
 		return nil, nil // 如果没有子菜单，返回空列表而不是错误
@@ -67,10 +64,10 @@ func buildSubMenuTree(menuId uint, childrenMap map[uint][]entity.SysMenu) (subMe
 			Url:      item.Url,
 			// 复制其他的所需字段...
 		}
-		childMenusDto = append(childMenusDto, childMenuDto)
+		subMenuTree = append(subMenuTree, childMenuDto)
 	}
 
-	return childMenusDto, nil
+	return subMenuTree, nil
 }
 
 // 当前登录用户左侧菜单列表
