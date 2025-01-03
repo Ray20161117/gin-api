@@ -60,7 +60,6 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 	}
 
 	ip := c.ClientIP()
-
 	// 验证码是否过期
 	code := utils.RedisStore{}.Get(loginDto.IdKey, true)
 
@@ -76,20 +75,19 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 		response.Failed(c, int(response.ApiCode.CAPTCHANOTTRUE), response.ApiCode.GetMessage(response.ApiCode.CAPTCHANOTTRUE))
 		return
 	}
-
 	// 校验用户信息
 	sysAdmin, err := dto.SysAdminDetail(loginDto)
 	if err != nil {
 		response.Failed(c, int(response.ApiCode.QUERYUSERFAILED), response.ApiCode.GetMessage(response.ApiCode.QUERYUSERFAILED))
 		return
 	}
-
+	// 校验密码
 	if sysAdmin.Password != utils.EncryptionMd5(loginDto.Password) {
 		dto.CreateSysLoginInfo(loginDto.Username, ip, utils.GetRealAddressByIP(ip), utils.GetBrowser(c), utils.GetOs(c), "密码不正确", 2)
 		response.Failed(c, int(response.ApiCode.PASSWORDNOTTRUE), response.ApiCode.GetMessage(response.ApiCode.PASSWORDNOTTRUE))
 		return
 	}
-
+	// 校验账号状态
 	if sysAdmin.Status == 2 {
 		dto.CreateSysLoginInfo(loginDto.Username, ip, utils.GetRealAddressByIP(ip), utils.GetBrowser(c), utils.GetOs(c), "账号已停用", 2)
 		response.Failed(c, int(response.ApiCode.STATUSISENABLE), response.ApiCode.GetMessage(response.ApiCode.STATUSISENABLE))
@@ -106,30 +104,11 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 	dto.CreateSysLoginInfo(loginDto.Username, ip, utils.GetRealAddressByIP(ip), utils.GetBrowser(c), utils.GetOs(c), "登录成功", 1)
 
 	// 查询左侧菜单列表
-	var leftMenuVo []entity.LeftMenuVoDto
 	leftMenuList, err := dto.QueryLeftMenuList(sysAdmin.ID)
 	if err != nil {
 		response.Failed(c, int(response.ApiCode.QUERYLEFTMENUFAILED), response.ApiCode.GetMessage(response.ApiCode.QUERYLEFTMENUFAILED))
 		return
 	}
-
-	for _, value := range leftMenuList {
-		menuSvoList, err := dto.QueryMenuVoList(sysAdmin.ID, value.Id)
-		if err != nil {
-			response.Failed(c, int(response.ApiCode.QUERYLEFTMENUFAILED), response.ApiCode.GetMessage(response.ApiCode.QUERYLEFTMENUFAILED))
-			return
-		}
-
-		item := entity.LeftMenuVoDto{
-			MenuSvoList: menuSvoList,
-			Id:          value.Id,
-			MenuName:    value.MenuName,
-			Icon:        value.Icon,
-			Url:         value.Url,
-		}
-		leftMenuVo = append(leftMenuVo, item)
-	}
-
 	// 查询权限列表
 	permissionList, err := dto.QueryPermissionValueList(sysAdmin.ID)
 	if err != nil {
@@ -145,7 +124,7 @@ func (s SysAdminServiceImpl) Login(c *gin.Context, loginDto entity.LoginDto) {
 	response.Success(c, map[string]interface{}{
 		"token":          tokenString,
 		"sysAdmin":       sysAdmin,
-		"leftMenuList":   leftMenuVo,
+		"leftMenuList":   leftMenuList,
 		"permissionList": stringList,
 	})
 }
